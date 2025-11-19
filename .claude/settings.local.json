@@ -2,9 +2,20 @@
   "permissions": {
     "allow": [
       "Bash(chmod:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(uv --version:*)",
+      "Bash(uv init:*)",
+      "Bash(uv sync)",
+      "Bash(uv pip list:*)",
+      "Bash(uv run python:*)"
     ],
     "deny": [],
     "ask": []
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.js"
   }
 }

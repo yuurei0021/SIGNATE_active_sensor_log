@@ -11,7 +11,7 @@
 - **Python**: 3.11以上
 - **パッケージマネージャ**: uv
 - **依存関係**: `pyproject.toml` に定義（numpy 1.x系、pandas、scikit-learn、xgboost、lightgbm、matplotlib、seaborn）
-- **実行**: `uv run python experiments/YYYYMMDD_実験名/main.py`
+- **実行**: `uv run python experiments/YYYYMMDD_NN_実験名/main.py`
 
 ## ファイル構成
 
@@ -24,7 +24,7 @@ SIGNATE_active_sensor_log/
 │       ├── train_master.csv # 訓練データのラベル情報
 │       └── sample_submit.csv # 提出ファイルサンプル
 ├── experiments/            # 実験用フォルダ
-│   └── YYYYMMDD_実験名/   # 実験ごとにフォルダを作成
+│   └── YYYYMMDD_NN_実験名/ # 実験ごとにフォルダを作成（NNは連番01, 02...）
 │       ├── main.py         # 実験用スクリプト（AI Agent対応）
 │       ├── predictions/    # 予測結果
 │       │   ├── oof.csv            # OOF予測（ID + 確率 + 予測クラス）
@@ -78,9 +78,10 @@ test_00002,walking
 - **CLAUDE.md更新ルール**: リポジトリに変更を加えた際、その情報をAI Agentが今後の作業で考慮する必要がある場合は、本ファイル（CLAUDE.md）を更新すること
 
 ### フォルダ命名規則
-- **形式**: `YYYYMMDD_実験名`
-- **例**: `20250119_baseline_rf`, `20250120_deep_lstm`
+- **形式**: `YYYYMMDD_NN_実験名`（NNは連番: 01, 02, 03...）
+- **例**: `20251120_01_data_validation`, `20251120_02_baseline_rf`, `20251121_01_feature_engineering`
 - **場所**: `experiments/`ディレクトリ配下
+- **同日複数実験**: 連番により実行順序を明確化
 
 ### 実験フォルダ構成
 各実験フォルダには以下を含める：
@@ -108,17 +109,18 @@ test_00002,walking
 
 ### 実験履歴の記録
 - 各実験完了後、本ファイル（CLAUDE.md）の「実験履歴」セクションに要約を追加
-- 日付、目的、主な内容、精度、次のステップを記録
+- 見出しは実験フォルダ名と一致させる（例: `### 20251120_01_data_validation`）
+- 目的、アプローチ、結果、次のステップを記録
 
 ### コミットルール
 - 実験フォルダ作成時にコミット
 - 実験完了・中断時にコミット
-- コミットメッセージ例: `Add experiment: 20250119_baseline_rf`
+- コミットメッセージ例: `Add experiment: 20251120_01_data_validation`
 - pushはユーザーから明示的に指示されたときのみ実行すること
 
 ## 実験履歴
 
-### 20251120 - データ検証
+### 20251120_01_data_validation
 **目的**: 全trainとtestデータがモデル入力可能な状態かを検証し、前処理の必要性を判断
 **アプローチ**: 全4,523 trainファイルと1,939 testファイルに対して、欠損値・データ形状・数値型・無限大値を検証
 **結果**: 全データが有効（前処理不要）。クラス分布: running(52.2%), walking(29.0%), idle(16.4%), stairs(2.4%)
