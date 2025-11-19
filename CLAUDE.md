@@ -6,6 +6,41 @@
 ### 目的
 与えられたTrainデータを用いてモデルを作成し、Testデータに対して最も精度の良いモデルを作成すること
 
+## 環境構築
+
+### 前提条件
+- **Python**: 3.11以上
+- **パッケージマネージャ**: [uv](https://github.com/astral-sh/uv) (推奨)
+
+### uvのインストール
+```bash
+# macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows (PowerShell)
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+### 仮想環境のセットアップ
+```bash
+# 依存パッケージのインストール
+uv sync
+
+# スクリプトの実行
+uv run python experiments/YYYYMMDD_実験名/main.py
+```
+
+### インストールされるパッケージ
+- **numpy**: 1.x系 (2.x非対応)
+- **pandas**: データ処理
+- **scikit-learn**: 機械学習基礎
+- **xgboost**: 勾配ブースティング
+- **lightgbm**: 高速勾配ブースティング
+- **matplotlib**: グラフ描画
+- **seaborn**: 統計的可視化
+
+依存関係の詳細は `pyproject.toml` を参照。
+
 ## ファイル構成
 
 ```
@@ -26,6 +61,10 @@ SIGNATE_active_sensor_log/
 │       │   └── fold_indices.pkl   # CV fold情報（オプション）
 │       ├── model/          # 学習済みモデル
 │       └── README.md       # 実験の詳細記録
+├── .venv/                  # 仮想環境（gitignore対象）
+├── pyproject.toml          # プロジェクト設定・依存関係
+├── .python-version         # Python バージョン指定
+├── .gitignore              # Git除外設定
 └── CLAUDE.md              # このファイル
 ```
 
