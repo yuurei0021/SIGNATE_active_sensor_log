@@ -42,15 +42,34 @@ SIGNATE_active_sensor_log/
 
 ## データ形式
 
-### 訓練データ
-- **train_master.csv**: `id,class` - 4,523件、クラス: `running`, `walking`, `idle`, `stairs`
-- **train/*.csv**: `accelerometer_X,accelerometer_Y,accelerometer_Z` - 3軸加速度センサー、30行/ファイル（0.5秒間隔、15秒間）
+### train_master.csv
+```csv
+id,class
+train_00000,running
+train_00001,running
+train_00003,walking
+```
+- 4,523件、クラス: `running`, `walking`, `idle`, `stairs`
 
-### テストデータ
-- **test/*.csv**: 訓練データと同じ形式の3軸加速度センサーデータ
+### train/*.csv
+```csv
+accelerometer_X,accelerometer_Y,accelerometer_Z
+8.695741,-1.149217,-6.325481
+-2.485181,6.770803,-1.656788
+...
+```
+- 3軸加速度センサー、30行/ファイル（0.5秒間隔、15秒間）
 
-### 提出形式
-- **sample_submit.csv**: `test_id,predicted_class` - 提出ファイルの形式
+### test/*.csv
+- 訓練データと同じ形式の3軸加速度センサーデータ
+
+### sample_submit.csv
+```csv
+test_00000,stairs
+test_00001,stairs
+test_00002,walking
+```
+- 提出ファイルの形式: `test_id,predicted_class`
 
 ## 実験管理ルール
 
@@ -94,6 +113,7 @@ SIGNATE_active_sensor_log/
 - 実験フォルダ作成時にコミット
 - 実験完了・中断時にコミット
 - コミットメッセージ例: `Add experiment: 20250119_baseline_rf`
+- **重要**: pushはユーザーから明示的に指示されたときのみ実行すること
 
 ## 実験履歴
 
