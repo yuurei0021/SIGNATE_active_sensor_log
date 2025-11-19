@@ -6,40 +6,12 @@
 ### 目的
 与えられたTrainデータを用いてモデルを作成し、Testデータに対して最も精度の良いモデルを作成すること
 
-## 環境構築
+## 環境
 
-### 前提条件
 - **Python**: 3.11以上
-- **パッケージマネージャ**: [uv](https://github.com/astral-sh/uv) (推奨)
-
-### uvのインストール
-```bash
-# macOS/Linux
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Windows (PowerShell)
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-### 仮想環境のセットアップ
-```bash
-# 依存パッケージのインストール
-uv sync
-
-# スクリプトの実行
-uv run python experiments/YYYYMMDD_実験名/main.py
-```
-
-### インストールされるパッケージ
-- **numpy**: 1.x系 (2.x非対応)
-- **pandas**: データ処理
-- **scikit-learn**: 機械学習基礎
-- **xgboost**: 勾配ブースティング
-- **lightgbm**: 高速勾配ブースティング
-- **matplotlib**: グラフ描画
-- **seaborn**: 統計的可視化
-
-依存関係の詳細は `pyproject.toml` を参照。
+- **パッケージマネージャ**: uv
+- **依存関係**: `pyproject.toml` に定義（numpy 1.x系、pandas、scikit-learn、xgboost、lightgbm、matplotlib、seaborn）
+- **実行**: `uv run python experiments/YYYYMMDD_実験名/main.py`
 
 ## ファイル構成
 
@@ -70,46 +42,15 @@ SIGNATE_active_sensor_log/
 
 ## データ形式
 
-### train_master.csv
-- **概要**: 訓練データのラベル情報ファイル
-- **フォーマット**: `id,class`
-- **行数**: 4,523件（ヘッダー除く）
-- **クラス**: `running`, `walking`, `idle`, `stairs`
-- **例**:
-  ```
-  id,class
-  train_00000,running
-  train_00001,running
-  train_00003,walking
-  ```
+### 訓練データ
+- **train_master.csv**: `id,class` - 4,523件、クラス: `running`, `walking`, `idle`, `stairs`
+- **train/*.csv**: `accelerometer_X,accelerometer_Y,accelerometer_Z` - 3軸加速度センサー、30行/ファイル（0.5秒間隔、15秒間）
 
-### train/train_*.csv
-- **概要**: 訓練データのセンサーログ
-- **フォーマット**: `accelerometer_X,accelerometer_Y,accelerometer_Z`
-- **データ**: 3軸加速度センサーの時系列データ
-- **サンプリング**: 0.5秒刻みで30データポイント、計15秒間
-- **例**:
-  ```
-  accelerometer_X,accelerometer_Y,accelerometer_Z
-  8.695741,-1.149217,-6.325481
-  -2.485181,6.770803,-1.656788
-  ```
+### テストデータ
+- **test/*.csv**: 訓練データと同じ形式の3軸加速度センサーデータ
 
-### test/test_*.csv
-- **概要**: テストデータのセンサーログ
-- **フォーマット**: trainデータと同様の3軸加速度センサーデータ
-- **サンプリング**: 0.5秒刻みで30データポイント、計15秒間
-- **目的**: 学習済みモデルによる動作分類の対象
-
-### sample_submit.csv
-- **概要**: 提出ファイルの形式例
-- **フォーマット**: `test_id,predicted_class`
-- **例**:
-  ```
-  test_00000,stairs
-  test_00001,stairs
-  test_00002,walking
-  ```
+### 提出形式
+- **sample_submit.csv**: `test_id,predicted_class` - 提出ファイルの形式
 
 ## 実験管理ルール
 
@@ -156,24 +97,10 @@ SIGNATE_active_sensor_log/
 
 ## 実験履歴
 
-### [日付] - [実験タイトル]
-
-**目的**: [このセッションで達成したいこと]
-
-**主な内容**:
-- [ポイント1]
-- [ポイント2]
-- [ポイント3]
-
-**精度**:
-- [生成されたファイルやコード]
-- [決定事項]
-
-**次のステップ**:
-- [ ] [タスク1]
-- [ ] [タスク2]
-
-**メモ**:
-[重要な気づきや注意点]
+### YYYYMMDD - [実験タイトル]
+**目的**: [達成したいこと]
+**アプローチ**: [手法・モデル・特徴量など]
+**結果**: [OOF/CV スコア]
+**次のステップ**: [改善案]
 
 ---
