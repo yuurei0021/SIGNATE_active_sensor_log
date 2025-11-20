@@ -6,6 +6,12 @@
 ### 目的
 与えられたTrainデータを用いてモデルを作成し、Testデータに対して最も精度の良いモデルを作成すること
 
+### 評価指標
+- **F1 Macro（マクロ平均F1スコア）**: コンペティションの公式評価指標
+- 各クラス（running, walking, idle, stairs）のF1スコアを算出し、その平均を取る
+- クラス不均衡に対して公平な評価が可能
+- モデル開発・評価時は必ずF1 Macroを主要指標として使用すること
+
 ## 環境
 
 - **Python**: 3.11以上
@@ -18,11 +24,15 @@
 ```
 SIGNATE_active_sensor_log/
 ├── data/
-│   └── raw/
-│       ├── test/           # テストデータ (test_00000.csv ~ test_xxxxx.csv)
-│       ├── train/          # 訓練データ (train_00000.csv ~ train_xxxxx.csv)
-│       ├── train_master.csv # 訓練データのラベル情報
-│       └── sample_submit.csv # 提出ファイルサンプル
+│   ├── raw/
+│   │   ├── test/           # テストデータ (test_00000.csv ~ test_xxxxx.csv)
+│   │   ├── train/          # 訓練データ (train_00000.csv ~ train_xxxxx.csv)
+│   │   ├── train_master.csv # 訓練データのラベル情報
+│   │   └── sample_submit.csv # 提出ファイルサンプル
+│   └── processed/          # 前処理済みデータ
+│       ├── prepare_data.py      # データ結合スクリプト
+│       ├── train_combined.csv   # 結合済み訓練データ
+│       └── test_combined.csv    # 結合済みテストデータ
 ├── experiments/            # 実験用フォルダ
 │   └── YYYYMMDD_NN_実験名/ # 実験ごとにフォルダを作成（NNは連番01, 02...）
 │       ├── main.py         # 実験用スクリプト（AI Agent対応）
@@ -71,6 +81,22 @@ test_00001,stairs
 test_00002,walking
 ```
 - 提出ファイルの形式: `test_id,predicted_class`
+
+### 結合済みデータ（推奨）
+
+**重要**: 毎回数千のファイルを読み込むのは非効率なため、事前に結合データを使用することを推奨
+
+#### train_combined.csv
+- 全訓練ファイルを結合したデータ（135,690行）
+- カラム: `accelerometer_X`, `accelerometer_Y`, `accelerometer_Z`, `id`, `time_step`, `class`
+- `id`: ファイルID（train_00000など）
+- `time_step`: ファイル内の行番号（0-29）
+- 作成方法: `uv run python data/processed/prepare_data.py`
+
+#### test_combined.csv
+- 全テストファイルを結合したデータ（58,170行）
+- カラム: `accelerometer_X`, `accelerometer_Y`, `accelerometer_Z`, `id`, `time_step`
+- 作成方法: 同上
 
 ## 実験管理ルール
 
@@ -151,5 +177,16 @@ test_00002,walking
 **アプローチ**: 合成加速度の大きさ分析、サンプルごとの平均加速度ベクトル分析、動的加速度の分離、時系列での加速度変化
 **結果**: 座標系はスマートフォンに固定されており、動作によって端末の向きが異なる。重力は常に存在するが、running時の動的加速度（≈15.5 m/s²）が重力（9.8 m/s²）を上回り、重力成分が「見えなく」なる。合成加速度の大きさ（idle≈9.8, walking≈12.9, running≈17.0）は動作強度を表す有効な特徴量
 **次のステップ**: 座標系に依存しない特徴量設計（加速度の大きさ、軸間相関、周波数成分、動的加速度の統計量）
+
+---
+
+### 20251120_05_baseline_lightgbm
+**目的**: LightGBMによるベースラインモデルの構築。時間領域・周波数領域の特徴量を用いた高精度モデルの実現
+**アプローチ**:
+- 効率化のため、事前に全データを結合（train_combined.csv, test_combined.csv）
+- 59次元の特徴量（各軸の統計量、FFT、合成加速度、軸間相関、動的加速度）
+- 5-Fold Stratified CV、Early Stopping使用
+**結果**: **OOF F1 Macro = 0.9950**（99.50%）、Accuracy = 0.9991。Y軸（前後方向）の特徴量が最重要。stairsクラスのrecallが0.96とやや低い（サンプル数110件）
+**次のステップ**: stairsクラスの改善（データ拡張、クラス重み調整）、モデルの多様化（XGBoost、NN）、追加特徴量（ウェーブレット変換）
 
 ---

@@ -44,6 +44,11 @@ env/
 experiments/*/model/
 experiments/*/predictions/
 
+# Processed data (exclude large combined files)
+data/processed/*.csv
+data/processed/*.csv.gz
+data/processed/*.parquet
+
 # OS
 .DS_Store
 Thumbs.db

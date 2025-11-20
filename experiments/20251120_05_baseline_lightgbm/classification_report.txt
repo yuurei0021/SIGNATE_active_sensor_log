@@ -1,0 +1,13 @@
+Classification Report (OOF Predictions)
+================================================================================
+
+              precision    recall  f1-score   support
+
+     running       1.00      1.00      1.00      2361
+     walking       1.00      1.00      1.00      1311
+        idle       1.00      1.00      1.00       741
+      stairs       1.00      0.96      0.98       110
+
+    accuracy                           1.00      4523
+   macro avg       1.00      0.99      0.99      4523
+weighted avg       1.00      1.00      1.00      4523
