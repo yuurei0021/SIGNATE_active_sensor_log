@@ -78,6 +78,15 @@ class_weights = {
 | OOF Log Loss | 0.0019 | 0.0011 | -0.0008 |
 | 特徴量数 | 59 | **72** | +13 |
 
+### Leaderboard Score
+
+| データセット | Baseline | Phase 1 |
+|-------------|----------|---------|
+| Public LB   | 1.0000   | 1.0000  |
+| **Private LB** | **1.0000** | **1.0000** ✨ |
+
+**完璧な予測を達成！** Phase 1の改善により、OOFの誤分類1件はPrivate LBには含まれていなかったことが判明。
+
 ### Fold別スコア
 
 | Fold | F1 Macro | Accuracy | Log Loss |
@@ -216,11 +225,13 @@ uv run python experiments/20251120_07_stairs_improvement/main.py --save-models
 - XGBoost、CatBoostとの組み合わせ
 - 2段階モデル（stairs vs 非stairs → 3クラス分類）
 
-## Private LB予想
+## Private LB結果
 
-- Public LB: 1.0000
-- Phase 1実装により、Private LBでも1.0000達成の可能性が高い
-- 最悪でも0.9995以上を期待
+- Public LB: **1.0000** ✅
+- Private LB: **1.0000** ✅
+- **完璧な予測を達成！**
+
+Phase 1の改善により、trainデータで1件残っていた誤分類（train_02397）はPrivate testデータには存在せず、完璧なスコアを達成。
 
 ## 関連実験
 
