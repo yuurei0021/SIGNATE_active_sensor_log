@@ -201,9 +201,11 @@ def main():
     print('- IMPROVED model has better OOF score (0.9988 vs 0.9950)')
     print('- Both models achieve 100% Public LB score')
     print('- Walking min confidence decreased but only affects 1 sample')
-    print('- The 1 sample (test_01014) is still correctly predicted as walking')
-    print('\nRECOMMENDATION: Submit IMPROVED model (20251120_07) for Private LB')
+    print('- The 1 sample (test_01014) is predicted as walking by both models')
+    print('  (ground truth unknown - could be walking or stairs)')
+    print('\nRECOMMENDATION: Use IMPROVED model (20251120_07) as primary candidate')
     print('                 Keep BASELINE model (20251120_05) as backup')
+    print('                 Final decision after Private LB results')
 
 
 if __name__ == '__main__':
